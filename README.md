@@ -1,4 +1,4 @@
-# 🎮 Trilha Bíblica Gamificada - API
+# 🎮 Heaven - API
 
 API REST para plataforma de aprendizado bíblico gamificado com NestJS + Prisma + Supabase.
 

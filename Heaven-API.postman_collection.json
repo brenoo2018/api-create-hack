@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "trilha-biblica-api-collection",
-		"name": "🎮 Trilha Bíblica Gamificada - API",
-		"description": "Collection completa para testar a API da Trilha Bíblica Gamificada. Execute as requisições em sequência para testar o fluxo completo da plataforma.",
+		"_postman_id": "heaven-api-collection",
+		"name": "🎮 Heaven - API",
+		"description": "Collection completa para testar a API da Heaven. Execute as requisições em sequência para testar o fluxo completo da plataforma.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
