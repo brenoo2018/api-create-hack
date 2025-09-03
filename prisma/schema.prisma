@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Enums
+enum MissionType {
+  READING
+  QUICK_TASK
+  CHAT_TUTOR
+  QUIZ
+  REWARD
+  CALL_TUTOR
+}
+
+enum ProgressStatus {
+  LOCKED
+  UNLOCKED
+  DONE
+  COMPLETED
+}
+
+enum TutorMode {
+  guided
+  free
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  nickname  String?  @db.VarChar(50)
+  password  String
+  gender    String?  @db.VarChar(16)
+  avatarUrl String?  @map("avatar_url") @db.VarChar(512)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  journeyProgress UserJourneyProgress[]
+  missionProgress UserMissionProgress[]
+  stats           UserStats?
+
+  @@map("users")
+}
+
+model Journey {
+  id                  String   @id @default(uuid())
+  slug                String   @unique @db.VarChar(64)
+  title               String   @db.VarChar(120)
+  description         String   @db.Text
+  orderIndex          Int      @map("order_index")
+  colorHex            String   @map("color_hex") @db.Char(7)
+  gradientColor       String?  @map("gradient_color") @db.Char(7)
+  isUnlockedByDefault Boolean  @default(false) @map("is_unlocked_by_default")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  missions     Mission[]
+  userProgress UserJourneyProgress[]
+
+  @@map("journeys")
+}
+
+model Mission {
+  id          String      @id @default(uuid())
+  journeyId   String      @map("journey_id")
+  title       String      @db.VarChar(120)
+  type        MissionType
+  orderIndex  Int         @map("order_index")
+  xpAmount    Int         @map("xp_amount")
+  iconName    String      @map("icon_name") @db.VarChar(40)
+  config      Json
+  coordinates Json
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  // Relations
+  journey      Journey               @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  userProgress UserMissionProgress[]
+
+  @@index([journeyId, orderIndex])
+  @@map("missions")
+}
+
+model UserJourneyProgress {
+  id          String         @id @default(uuid())
+  userId      String         @map("user_id")
+  journeyId   String         @map("journey_id")
+  status      ProgressStatus
+  startedAt   DateTime?      @map("started_at")
+  completedAt DateTime?      @map("completed_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  journey Journey @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, journeyId])
+  @@map("user_journey_progress")
+}
+
+model UserMissionProgress {
+  id         String         @id @default(uuid())
+  userId     String         @map("user_id")
+  missionId  String         @map("mission_id")
+  status     ProgressStatus
+  score      Int?
+  earnedXp   Int            @default(0) @map("earned_xp")
+  startedAt  DateTime?      @map("started_at")
+  finishedAt DateTime?      @map("finished_at")
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mission Mission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, missionId])
+  @@map("user_mission_progress")
+}
+
+model UserStats {
+  userId         String    @id @map("user_id")
+  totalXp        Int       @default(0) @map("total_xp")
+  currentStreak  Int       @default(0) @map("current_streak")
+  longestStreak  Int       @default(0) @map("longest_streak")
+  lastActiveDate DateTime? @map("last_active_date") @db.Date
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_stats")
+}

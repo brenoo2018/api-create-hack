@@ -1,0 +1,63 @@
+# ===== Node / projeto
+/dist
+/node_modules
+/build
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.DS_Store
+/coverage
+/.nyc_output
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Dotenv
+.env
+.env.*.local
+.env.local
+
+# Temp
+.temp
+.tmp
+pids
+*.pid
+*.seed
+*.pid.lock
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Prisma gerado
+/generated/prisma
+
+# 
+# Terraform (não versionar artefatos locais/segredos)
+**/.terraform/**
+**/*.tfstate
+**/*.tfstate.*
+*.tfvars
+*.tfvars.json
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+<<<<<<< HEAD
+# NÃO ignore o lock do provider (é bom versionar):
+!**/.terraform.lock.hcl
+=======
+# Mas mantenha o lock
+!**/.terraform.lock.hcl
+
+
+>>>>>>> 3c21d86b452a4c06c4e766a9aa71b2383ca5985d

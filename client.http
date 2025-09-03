@@ -1,0 +1,37 @@
+### Variables
+@localUrl = http://34.227.50.195:3333
+@baseUrl = {{$dotenv DEPLOYED_URL}}
+
+### Health Check
+GET {{localUrl}}/api/health
+
+### Health Check (Production)
+GET {{baseUrl}}/api/health
+
+### Create User
+POST {{localUrl}}/api/users
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "123456"
+}
+
+### Ask AI Question
+POST {{localUrl}}/api/ai/ask
+Content-Type: application/json
+
+{
+  "question": "O que a Bíblia diz sobre amor?",
+  "context": "Estou estudando sobre relacionamentos cristãos"
+}
+
+### Ask AI Question (Production)
+POST {{baseUrl}}/api/ai/ask
+Content-Type: application/json
+
+{
+  "question": "O que a Bíblia diz sobre amor?",
+  "context": "Estou estudando sobre relacionamentos cristãos"
+}

@@ -1,0 +1,763 @@
+{
+	"info": {
+		"_postman_id": "trilha-biblica-api-collection",
+		"name": "🎮 Trilha Bíblica Gamificada - API",
+		"description": "Collection completa para testar a API da Trilha Bíblica Gamificada. Execute as requisições em sequência para testar o fluxo completo da plataforma.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "👤 USUÁRIOS",
+			"item": [
+				{
+					"name": "1. Criar usuário",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('userId', response.id);",
+									"    pm.test('Usuário criado com sucesso', function () {",
+									"        pm.expect(response.id).to.be.a('string');",
+									"        pm.expect(response.email).to.eql('usuario@exemplo.com');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"usuario@exemplo.com\",\n  \"password\": \"senha123\",\n  \"nickname\": \"João Silva\",\n  \"gender\": \"M\",\n  \"avatarUrl\": \"https://example.com/avatar.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🗺️ JORNADAS",
+			"item": [
+				{
+					"name": "2. Criar jornada",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('journeyId', response.id);",
+									"    pm.test('Jornada criada com sucesso', function () {",
+									"        pm.expect(response.slug).to.be.a('string');",
+									"        pm.expect(response.title).to.eql('Jardim do Éden');",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Jardim do Éden\",\n  \"description\": \"A criação e a primeira desobediência\",\n  \"orderIndex\": 1,\n  \"colorHex\": \"#4CAF50\",\n  \"gradientColor\": \"#8BC34A\",\n  \"isUnlockedByDefault\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/journeys",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"journeys"
+							]
+						}
+					}
+				},
+				{
+					"name": "3. Listar todas as jornadas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/journeys",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"journeys"
+							]
+						}
+					}
+				},
+				{
+					"name": "4. Listar jornadas com progresso do usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/journeys?userId={{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"journeys"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "5. Buscar jornada específica",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/journeys/{{journeyId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"journeys",
+								"{{journeyId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "6. Buscar jornada com progresso do usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/journeys/{{journeyId}}?userId={{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"journeys",
+								"{{journeyId}}"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🎯 MISSÕES",
+			"item": [
+				{
+					"name": "7. Criar missão de leitura",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('mission1Id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"journeyId\": \"{{journeyId}}\",\n  \"title\": \"Leitura: Gênesis 2:15-17\",\n  \"type\": \"READING\",\n  \"orderIndex\": 1,\n  \"xpAmount\": 5,\n  \"iconName\": \"book\",\n  \"config\": {\n    \"passage_ref\": \"Gênesis 2:15-17\",\n    \"translation\": \"ARA\"\n  },\n  \"coordinates\": { \"x\": 70, \"y\": 140 }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/missions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions"
+							]
+						}
+					}
+				},
+				{
+					"name": "8. Criar missão rápida",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('mission2Id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"journeyId\": \"{{journeyId}}\",\n  \"title\": \"Missão Rápida: Responsabilidade\",\n  \"type\": \"QUICK_TASK\",\n  \"orderIndex\": 2,\n  \"xpAmount\": 3,\n  \"iconName\": \"star\",\n  \"config\": {\n    \"timer_sec\": 120,\n    \"prompt\": \"Resuma em 2 minutos qual foi a ordem que Deus deu a Adão.\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/missions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions"
+							]
+						}
+					}
+				},
+				{
+					"name": "9. Criar missão de chat com tutor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('mission3Id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"journeyId\": \"{{journeyId}}\",\n  \"title\": \"Conversa com Claudinho\",\n  \"type\": \"CHAT_TUTOR\",\n  \"orderIndex\": 3,\n  \"xpAmount\": 10,\n  \"iconName\": \"chat\",\n  \"config\": {\n    \"tutor\": \"Claudinho\",\n    \"mode\": \"guided\",\n    \"min_turns\": 1,\n    \"unit_goal\": \"Aplicação prática da obediência\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/missions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions"
+							]
+						}
+					}
+				},
+				{
+					"name": "10. Criar quiz",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('mission4Id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"journeyId\": \"{{journeyId}}\",\n  \"title\": \"Quiz: Jardim do Éden\",\n  \"type\": \"QUIZ\",\n  \"orderIndex\": 4,\n  \"xpAmount\": 8,\n  \"iconName\": \"quiz\",\n  \"config\": {\n    \"questions\": [\n      {\n        \"id\": \"q1\",\n        \"type\": \"mc\",\n        \"text\": \"Qual foi a ordem que Deus deu a Adão no jardim?\",\n        \"choices\": [\"Cuidar do jardim\", \"Não comer da árvore proibida\", \"Ambas as anteriores\"],\n        \"answer_index\": 2\n      }\n    ]\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/missions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions"
+							]
+						}
+					}
+				},
+				{
+					"name": "11. Criar recompensa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('mission5Id', response.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"journeyId\": \"{{journeyId}}\",\n  \"title\": \"Recompensa: Guardião do Éden\",\n  \"type\": \"REWARD\",\n  \"orderIndex\": 5,\n  \"xpAmount\": 15,\n  \"iconName\": \"chest\",\n  \"config\": {\n    \"badge_code\": \"GUARDIAO_EDEN\",\n    \"coins\": 25\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/missions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions"
+							]
+						}
+					}
+				},
+				{
+					"name": "12. Listar missões de uma jornada",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/missions/journey/{{journeyId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions",
+								"journey",
+								"{{journeyId}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "13. Listar missões com progresso do usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/missions/journey/{{journeyId}}?userId={{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions",
+								"journey",
+								"{{journeyId}}"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "14. Buscar missão específica",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/missions/{{mission1Id}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions",
+								"{{mission1Id}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "15. Buscar missão com progresso do usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/missions/{{mission1Id}}?userId={{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"missions",
+								"{{mission1Id}}"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🎮 PROGRESSO DO USUÁRIO",
+			"item": [
+				{
+					"name": "16. Iniciar jornada",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"journeyId\": \"{{journeyId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user-progress/journeys/start",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user-progress",
+								"journeys",
+								"start"
+							]
+						}
+					}
+				},
+				{
+					"name": "17. Iniciar missão 1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"missionId\": \"{{mission1Id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user-progress/missions/start",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user-progress",
+								"missions",
+								"start"
+							]
+						}
+					}
+				},
+				{
+					"name": "18. Completar missão 1",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"missionId\": \"{{mission1Id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user-progress/missions/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user-progress",
+								"missions",
+								"complete"
+							]
+						}
+					}
+				},
+				{
+					"name": "19. Completar missão 2",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": \"{{userId}}\",\n  \"missionId\": \"{{mission2Id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user-progress/missions/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user-progress",
+								"missions",
+								"complete"
+							]
+						}
+					}
+				},
+				{
+					"name": "20. Ver estatísticas do usuário",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/user-progress/stats/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user-progress",
+								"stats",
+								"{{userId}}"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "🤖 INTEGRAÇÃO AI",
+			"item": [
+				{
+					"name": "21. Consultar Apologist AI",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"question\": \"Como posso aplicar a lição de obediência do Jardim do Éden na minha vida hoje?\",\n  \"context\": \"Acabei de estudar sobre Adão e Eva no Jardim do Éden\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ai/ask",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ai",
+								"ask"
+							]
+						}
+					}
+				},
+				{
+					"name": "22. Pergunta para missão de chat",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"question\": \"O que significa ser um guardião responsável como Adão foi chamado a ser?\",\n  \"context\": \"Estou na missão 'Conversa com Claudinho' sobre responsabilidade no Jardim do Éden\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ai/ask",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ai",
+								"ask"
+							]
+						}
+					}
+				},
+				{
+					"name": "23. Text-to-Speech (TTS)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"text\": \"E tomou o Senhor Deus o homem e o pôs no jardim do Éden para o lavrar e o guardar.\",\n  \"voice\": \"male\",\n  \"speed\": 1.0,\n  \"language\": \"pt-BR\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ai/text-to-speech",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ai",
+								"text-to-speech"
+							]
+						}
+					}
+				},
+				{
+					"name": "24. Speech-to-Text (STT)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "language",
+									"value": "pt-BR",
+									"type": "text"
+								},
+								{
+									"key": "audio",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ai/speech-to-text",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ai",
+								"speech-to-text"
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3333",
+			"type": "string"
+		}
+	]
+}
